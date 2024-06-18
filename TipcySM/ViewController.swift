@@ -61,29 +61,32 @@ class ViewController: UIViewController {
         return stack
     }()
     
-    let zeroPctButton: UIButton = {
+    lazy var zeroPctButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("0%", for: .normal)
         button.setTitleColor(UIColor(red: 79/255, green: 173/255, blue: 113/255, alpha: 1.0), for: .normal)
+        button.addTarget(self, action: #selector(tipChanged), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    let tenPctButton: UIButton = {
+    lazy var tenPctButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("10%", for: .normal)
         button.setTitleColor(UIColor(red: 79/255, green: 173/255, blue: 113/255, alpha: 1.0), for: .normal)
+        button.addTarget(self, action: #selector(tipChanged), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     
-    let twentyPctButton: UIButton = {
+    lazy var twentyPctButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("20%", for: .normal)
         button.setTitleColor(UIColor(red: 79/255, green: 173/255, blue: 113/255, alpha: 1.0), for: .normal)
+        button.addTarget(self, action: #selector(tipChanged), for: .touchUpInside)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -99,11 +102,12 @@ class ViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    let stepper: UIStepper = {
+    lazy var stepper: UIStepper = {
         let stepper = UIStepper()
         stepper.value = 2
         stepper.maximumValue = 25
         stepper.minimumValue = 2
+        stepper.addTarget(self, action: #selector(stepperValueChanged), for: .valueChanged)
         stepper.stepValue = 1
         stepper.translatesAutoresizingMaskIntoConstraints = false
         return stepper
@@ -139,27 +143,42 @@ class ViewController: UIViewController {
         return textField
     }()
     
-    let calculateButton: UIButton = {
+    lazy var calculateButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor(red: 79/255, green: 173/255, blue: 113/255, alpha: 1.0)
+        button.addTarget(self, action: #selector(calculatePressed), for: .touchUpInside)
         button.setTitle("Calculate", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 35)
         return button
     }()
     
+    let resultView = ResultVC()
     
     
-    
-    
+   //MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         constraints()
         
+        
     }
+    @objc func tipChanged(_sender: UIButton) {
+        print(_sender.currentTitle!)
+        
+    }
+    @objc func stepperValueChanged(_sender: UIStepper) {
+        print(_sender.value)
+    }
+    @objc func calculatePressed(_sender: UIButton) {
+        print(_sender.currentTitle!)
+        
+        present(resultView, animated: true, completion: nil)
+    }
+    
     
     func constraints() {
         view.addSubview(choiceView)
