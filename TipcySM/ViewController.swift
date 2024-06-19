@@ -70,7 +70,7 @@ class ViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     lazy var tenPctButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("10%", for: .normal)
@@ -156,27 +156,61 @@ class ViewController: UIViewController {
     
     let resultView = ResultVC()
     
+    var tip = 0.1
+    var numberOfPeople = 2
+    var billTotal = 0.0
+    var finalResult = "0.0"
     
-   //MARK: - viewDidLoad
+    
+    
+    //MARK: - viewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         constraints()
-        
-        
     }
+    
+
+
+    
+    
     @objc func tipChanged(_sender: UIButton) {
-        print(_sender.currentTitle!)
+        billTextField.endEditing(true)
         
+        zeroPctButton.isSelected = false
+        tenPctButton.isSelected = false
+        twentyPctButton.isSelected = false
+        _sender.isSelected = true
+        let buttonTittle = _sender.currentTitle!
+        
+        let tittleWithoutPersentage = String(buttonTittle.dropLast())
+        let tittleAsANumber = Double(tittleWithoutPersentage)!
+        tip = tittleAsANumber/100
+        
+
     }
+    
+    //MARK: -@OBJC func
+    
     @objc func stepperValueChanged(_sender: UIStepper) {
-        print(_sender.value)
+        splitNumberLabel.text = String(format: "%.0f", stepper.value)
+        numberOfPeople = Int(_sender.value)
+        
     }
     @objc func calculatePressed(_sender: UIButton) {
-        print(_sender.currentTitle!)
+        let bill = billTextField.text!
+        if bill != "" {
+            billTotal = Double(bill)!
+            let result = billTotal * ( tip + 1) / Double(numberOfPeople)
+            finalResult = String(format: "%.2f", result)
+        }
+        
+        resultView.totalLabel.text = finalResult
+        resultView.settingsLabel.text = "Split between \(numberOfPeople) people, with \(tip) tip."
         
         present(resultView, animated: true, completion: nil)
+     
     }
     
     
@@ -246,3 +280,4 @@ class ViewController: UIViewController {
     }
     
 }
+
